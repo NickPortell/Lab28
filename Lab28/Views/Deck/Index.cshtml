@@ -1,0 +1,49 @@
+﻿<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<div id="cardContainer"></div>
+
+<script type="text/javascript">
+    var deck;
+    var deckID;
+    var hand;
+
+    function GenerateDeck() {
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            url: "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1",
+            success: function (result) {
+                console.log(result);
+                deckID = result.deck_id;
+            }
+        });
+    }
+
+    function Draw5(deckID) {
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            url: "https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=5",
+
+            success: function (result) {
+                hand = result.cards;
+                console.log(hand);
+                document.getElementById("cardContainer").innerHTML = "";
+
+                for (i in hand) {
+                    $('#cardContainer').append('<img id='+ hand[i].code +' src=' + hand[i].image + ' />');
+                    //document.getElementById("cardContainer").innerHTML += "<label for='+'card'+hand[i].code+'>+hand[i].value + ' of ' + hand[i].suit+'</label>";
+                    //$('#cardContainer').append('<label for='+'card'+hand[i].code+'>'+hand[i].value + ' of ' + hand[i].suit+'</label>');
+
+                } 
+
+            }
+        });
+    }
+
+    
+</script>
+
+<button onclick="GenerateDeck()">Make Deck</button>
+<button onclick="Draw5(deckID)">Draw 5</button>
+
